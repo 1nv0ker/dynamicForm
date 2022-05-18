@@ -1,16 +1,20 @@
 <template>
-  <div class="home" style="width:500px">
+  <div class="home" style="width:100%;height:100%;display">
+    <div>
       <HocComponent
-      v-for="item in testForm" 
+      v-for="item in forms" 
       v-bind="item"
+      @finish="onFinish"
+      @submit="onSubmit"
       :key="item.key">
         
       </HocComponent>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watch } from 'vue'
+import { defineComponent } from 'vue'
 import HocComponent from '@/components/Hoc'
 import { DownloadOutlined } from '@ant-design/icons-vue';
 import useForm from './form'
@@ -20,11 +24,31 @@ export default defineComponent({
     DownloadOutlined: DownloadOutlined
   },
   setup() {
-    const testForm = useForm()
+    const {forms, formValue, formRef} = useForm()
+    const onFinish = () => {
+      console.log(formValue.value)
+    }
+    const onSubmit = () => {
+      console.log('onSubmit', formValue.value)
+    }
     return {
-      testForm
+      forms,
+      onFinish,
+      formRef,
+      onSubmit
     }
   },
 })
 </script>
+<style lang="less" scoped>
+  .home {
+    width:100%;height:100%;
+    display:flex;
+    // align-items: center;
+    justify-content: center;
+    &>div {
+      margin-top: 200px;
+    }
+  }
+</style>
 

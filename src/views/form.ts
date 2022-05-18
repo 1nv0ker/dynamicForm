@@ -1,77 +1,126 @@
-import { Button, Input, Select, Switch, Form } from 'ant-design-vue'
-import { ref, VNode } from 'vue';
-export default () => { 
-  const checked = ref(false)
-  const inputValue = ref('')
+import { Input, Switch, Form, Button } from 'ant-design-vue'
+import { ref } from 'vue';
+const ComponentMap = {//组件名称映射
+  'username': Input,
+  'password': Input.Password,
+  'confirm': Button
+}
+enum key { 
+  username = 'username',
+  password = 'password',
+  confirm= 'confirm'
+}
+interface formValue { 
+  username?: string,
+  password?: string
+}
+const formValue = ref<formValue>({})//form表单数据
+const formRef = ref(null)//form实例
+export default () => { //基础form组件
   const forms = [
     {
       type: Form,
       key: 'form',
-      children: [
+      attrs: () => { 
+        return {
+          model: formValue.value,
+          autocomplete: "off",
+          ref: formRef
+        }
+      },
+      children: [//form item结构
         {
           type: Form.Item,
           key: 'formItem',
-          attrs:() => {
+          attrs: () => {
             return {
               label: 'username',
-              name: 'username'
+              name: 'username',
+              rules: [{ required: true, message: 'Please input your username!' }]
             }
           },
-          children: [formItem(key.input)]
+          children: [formItem(key.username)]
         },
         {
           type: Form.Item,
           key: 'formItem',
           attrs:() => {
             return {
-              label: 'test',
-              name: 'test'
+              label: 'password',
+              name: 'password',
+              rules: [{ required: true, message: 'Please input your password!' }]
             }
           },
-          children:[formItem(key.switch)]
+          children:[formItem(key.password)]
+        },
+        {
+          type: Form.Item,
+          key: 'confirm',
+          children:[formItem(key.confirm)]
         }
       ]
     }
   ]
-  return forms
-}
-const ComponentMap = {
-  'input': Input,
-  'switch': Switch
-}
-enum key { 
-  input = 'input',
-  switch = 'switch'
+  return  { 
+    formValue,
+    forms,
+    formRef
+  }
 }
 function formItem(key: key) { 
   return {
     type: ComponentMap[key],
     key: key,
-    attrs: attrs(key),
+    attrs: setAttrs(key),
+    slots: setSlots(key)
   }
 }
-function attrs(key:key) { 
+function setAttrs(key: key) { 
+  // const formValue = modelValue()
   switch (key) { 
-    case 'input':
-      const inputValue = ref('')
+    case 'username':
       return () => { 
         return {
           style: 'width:100px',
-          value: inputValue.value,
+          value: formValue.value.username,
           onChange: (e:any) => {
-            inputValue.value = e.target.value
+            formValue.value.username = e.target.value
           }
         }
       }
-    case 'switch':
-      const checked = ref(false)
+    case 'password':
+      // const passwordValue = ref('')
       return () => { 
         return {
-          checked: checked.value,
-          onChange: (value:boolean) => {
-            checked.value = value
+          value: formValue.value.password,
+          onChange: (e:any) => {
+            formValue.value.password = e.target.value
           }
         }
+      }
+    case 'confirm':
+      return () => { 
+        return {
+          type: 'primary',
+          onClick: () => { 
+            console.log('click')
+          },
+          htmlType: 'submit'
+        }
+      }
+    default:
+      return {}
+  }
+}
+function setSlots(key:key) {
+  switch (key) { 
+    case 'username':
+      return;
+    case 'password':
+      return;
+    case 'confirm':
+      return {
+        default: ()=>key
       }
     default:
       return {}
