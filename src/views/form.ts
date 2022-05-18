@@ -67,6 +67,7 @@ export default () => { //基础form组件
     formRef
   }
 }
+
 function formItem(key: key) { 
   return {
     type: ComponentMap[key],
@@ -75,26 +76,22 @@ function formItem(key: key) {
     slots: setSlots(key)
   }
 }
+/**
+ * 根据表单key返回组件的属性
+ * @param key 
+ * @returns 
+ */
 function setAttrs(key: key) { 
   // const formValue = modelValue()
   switch (key) { 
     case 'username':
-      return () => { 
-        return {
-          style: 'width:100px',
-          value: formValue.value.username,
-          onChange: (e:any) => {
-            formValue.value.username = e.target.value
-          }
-        }
-      }
     case 'password':
       // const passwordValue = ref('')
       return () => { 
         return {
-          value: formValue.value.password,
+          value: formValue.value[key],
           onChange: (e:any) => {
-            formValue.value.password = e.target.value
+            formValue.value[key] = e.target.value
           }
         }
       }
@@ -112,6 +109,11 @@ function setAttrs(key: key) {
       return {}
   }
 }
+/**
+ * 根据表单key生成不同插槽
+ * @param key 
+ * @returns 
+ */
 function setSlots(key:key) {
   switch (key) { 
     case 'username':

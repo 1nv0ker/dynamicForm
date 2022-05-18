@@ -16,12 +16,10 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import HocComponent from '@/components/Hoc'
-import { DownloadOutlined } from '@ant-design/icons-vue';
 import useForm from './form'
 export default defineComponent({
   components: {
-    HocComponent,
-    DownloadOutlined: DownloadOutlined
+    HocComponent
   },
   setup() {
     const {forms, formValue, formRef} = useForm()

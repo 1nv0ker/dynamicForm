@@ -3,10 +3,10 @@ interface fun<T> {
   ():T
 }
 interface slot { 
-  [key:string]:fun<VNode>
+  [key:string]:fun<VNode | string>
 }
 interface componentInstance { 
-  type: string | Component,
+  type: string | Component,//传入html标签或者组件
   attrs?: fun<any>,//数据驱动的模式设置组件属性
   slots?: slot,
   children?:componentInstance[]
