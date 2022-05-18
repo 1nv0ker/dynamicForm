@@ -1,20 +1,29 @@
-import { Input, Switch, Form, Button } from 'ant-design-vue'
+import { Input, Switch, Form, Button, Select } from 'ant-design-vue';
 import { ref } from 'vue';
 const ComponentMap = {//组件名称映射
   'username': Input,
   'password': Input.Password,
+  'switch': Switch,
+  'select': Select,
   'confirm': Button
 }
 enum key { 
   username = 'username',
   password = 'password',
+  switch = 'switch',
+  select = 'select',
   confirm= 'confirm'
 }
 interface formValue { 
   username?: string,
-  password?: string
+  password?: string,
+  switch?: boolean,
+  select?:string | number
 }
-const formValue = ref<formValue>({})//form表单数据
+const formValue = ref<formValue>({
+  switch: false,
+  select: 1
+})//form表单数据
 const formRef = ref(null)//form实例
 export default () => { //基础form组件
   const forms = [
@@ -31,7 +40,7 @@ export default () => { //基础form组件
       children: [//form item结构
         {
           type: Form.Item,
-          key: 'formItem',
+          key: 'username',
           attrs: () => {
             return {
               label: 'username',
@@ -43,7 +52,7 @@ export default () => { //基础form组件
         },
         {
           type: Form.Item,
-          key: 'formItem',
+          key: 'password',
           attrs:() => {
             return {
               label: 'password',
@@ -52,6 +61,30 @@ export default () => { //基础form组件
             }
           },
           children:[formItem(key.password)]
+        },
+        {
+          type: Form.Item,
+          key: 'switch',
+          attrs:() => {
+            return {
+              label: 'switch',
+              name: 'switch',
+              rules: [{ required: true}]
+            }
+          },
+          children:[formItem(key.switch)]
+        },
+        {
+          type: Form.Item,
+          key: 'select',
+          attrs:() => {
+            return {
+              label: 'select',
+              name: 'select',
+              rules: [{ required: true}]
+            }
+          },
+          children:[formItem(key.select)]
         },
         {
           type: Form.Item,
@@ -73,7 +106,8 @@ function formItem(key: key) {
     type: ComponentMap[key],
     key: key,
     attrs: setAttrs(key),
-    slots: setSlots(key)
+    slots: setSlots(key),
+    children: setChildren(key)
   }
 }
 /**
@@ -95,6 +129,24 @@ function setAttrs(key: key) {
           }
         }
       }
+    case 'switch':
+      return () => { 
+        return {
+          checked: formValue.value.switch,
+          onChange: (value:boolean) => { 
+            formValue.value.switch = value
+          }
+        }
+      }
+    case 'select':
+      return () => { 
+        return {
+          value: formValue.value.select,
+          onSelect: (value:string|number) => { 
+            formValue.value.select = value
+          }
+        }
+      }
     case 'confirm':
       return () => { 
         return {
@@ -106,7 +158,7 @@ function setAttrs(key: key) {
         }
       }
     default:
-      return {}
+      return () => { }
   }
 }
 /**
@@ -117,14 +169,53 @@ function setAttrs(key: key) {
 function setSlots(key:key) {
   switch (key) { 
     case 'username':
-      return;
     case 'password':
+    case 'switch':
+    case 'select':
       return;
     case 'confirm':
       return {
         default: ()=>key
       }
     default:
-      return {}
+      return;
+  }
+}
+/**
+ * 根据表单key生成子元素
+ * @param key 
+ */
+function setChildren(key:key) { 
+  switch (key) { 
+    case 'select':
+      return [
+        {
+          type: Select.Option,
+          label: '1-1',
+          attrs: () => { 
+            return {
+              label: '1-1',
+              value: 1
+            }
+          },
+          slots: {
+            default:() => '1-1'
+          }
+        },
+        {
+          type: Select.Option,
+          attrs: () => { 
+            return {
+              label: '1-2',
+              value: 2
+            }
+          },
+          slots: {
+            default:() => '1-2'
+          }
+        }
+      ]
+    default:
+      return;
   }
 }

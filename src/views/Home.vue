@@ -27,7 +27,7 @@ export default defineComponent({
       console.log(formValue.value)
     }
     const onSubmit = () => {
-      console.log('onSubmit', formValue.value)
+      
     }
     return {
       forms,
