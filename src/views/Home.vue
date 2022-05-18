@@ -14,7 +14,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, reactive } from 'vue'
 import HocComponent from '@/components/Hoc'
 import useForm from './form'
 export default defineComponent({
@@ -23,6 +23,7 @@ export default defineComponent({
   },
   setup() {
     const {forms, formValue, formRef} = useForm()
+    const a = reactive(forms)
     const onFinish = () => {
       console.log(formValue.value)
     }
@@ -30,7 +31,7 @@ export default defineComponent({
       
     }
     return {
-      forms,
+      forms: a,
       onFinish,
       formRef,
       onSubmit

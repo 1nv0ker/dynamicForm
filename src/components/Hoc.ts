@@ -2,13 +2,14 @@ import { h, resolveDynamicComponent, Component, VNode } from 'vue'
 interface fun<T> { 
   ():T
 }
-interface slot { 
-  [key:string]:fun<VNode | string>
+export interface slot { 
+  [key:string]:fun<VNode | string | null> | undefined
 }
-interface componentInstance { 
+export interface componentInstance { 
   type: string | Component,//传入html标签或者组件
   attrs?: fun<any>,//数据驱动的模式设置组件属性
   slots?: slot,
+  key?:string,
   children?:componentInstance[]
 }
 const HocComponent = (props: componentInstance) =>renderChild(props)
