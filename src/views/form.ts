@@ -1,5 +1,5 @@
 import { Input, Switch, Form, Button, Select, } from 'ant-design-vue';
-import { PlusOutlined } from '@ant-design/icons-vue'
+import { PlusOutlined, MinusCircleOutlined } from '@ant-design/icons-vue'
 import { ref, h, shallowRef } from 'vue';
 import { componentInstance, slot } from '../components/Hoc';
 interface ComponentMapTYPE { 
@@ -11,6 +11,7 @@ const ComponentMap:ComponentMapTYPE= {//组件名称映射
   'switch': Switch,
   'show': Input,
   'add': Button,
+  'reduce': Button,
   'select': Select,
   'confirm': Button,
   'test': Input,
@@ -23,6 +24,7 @@ enum key {
   select = 'select',
   show = 'show',
   add = 'add',
+  reduce = 'reduce',
   confirm = 'confirm'
 }
 interface formValue { 
@@ -92,6 +94,15 @@ export default () => { //基础form组件
         return {
           label: key.add,
           name: key.add
+        }
+      }
+    },
+    {
+      key: key.reduce,
+      attrs:() => {
+        return {
+          label: key.reduce,
+          name: key.reduce
         }
       }
     },
@@ -212,6 +223,20 @@ function setAttrs(key: key| string) {
           }
         }
       }
+    case 'reduce':
+      return () => { //动态减少表单
+        return {
+          type: 'primary',
+          onClick: () => { 
+            let index = addIndex-1
+            let findIndex = formItems.value.findIndex(item => item.key === `test_${index}`)
+            if (findIndex>=0) { 
+              formItems.value.splice(findIndex, 1)
+              addIndex--
+            }
+          }
+        }
+      }
     case 'confirm':
       return () => { 
         return {
@@ -248,6 +273,11 @@ function setSlots(key:key | string):slot|undefined {
       return {
         default: ()=>key
       }
+    case 'reduce':
+      return {
+        default: () => key,
+        icon: ()=> h(MinusCircleOutlined)
+    }
     case 'add':
       return {
         default: () => key,
