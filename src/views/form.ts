@@ -23,25 +23,93 @@ enum key {
   select = 'select',
   show = 'show',
   add = 'add',
-  confirm = 'confirm',
-  test = 'test'
+  confirm = 'confirm'
 }
 interface formValue { 
   username?: string,
   password?: string,
   switch?: boolean,
   select?: string | number,
-  show?: string
+  show?: string,
+  [key:string]:any
+}
+interface formItemType { 
+  key: key | string,
+  attrs?: componentInstance['attrs'],
+  slots?: componentInstance['slots']
 }
 const formValue = ref<formValue>({
   switch: false,
   select: 1
 })//form表单数据
+let addIndex = 0
 const formRef = ref(null)//form实例
 const showStatus = ref('')
-const forms = ref<componentInstance[]>([])
+const formItems = ref<formItemType[]>([])
 export default () => { //基础form组件
-  forms.value = [
+  formItems.value = [
+    {
+      key: key.username,
+      attrs:() => {
+        return {
+          label: key.username,
+          name: key.username,
+          rules: [{ required: true, message: 'Please input your username!' }]
+        }
+      }
+    },
+    {
+      key: key.password,
+      attrs:() => {
+        return {
+          label: key.password,
+          name: key.password,
+          rules: [{ required: true, message: 'Please input your password!' }]
+        }
+      }
+    },
+    {
+      key: key.show,
+      attrs:() => {
+        return {
+          label: key.show,
+          name: key.show
+        }
+      }
+    },
+    {
+      key: key.switch,
+      attrs:() => {
+        return {
+          label: key.switch,
+          name: key.switch
+        }
+      }
+    },
+    {
+      key: key.add,
+      attrs:() => {
+        return {
+          label: key.add,
+          name: key.add
+        }
+      }
+    },
+    {
+      key: key.select,
+      attrs:() => {
+        return {
+          label: key.select,
+          name: key.select,
+          rules: [{ required: true}]
+        }
+      }
+    },
+    {
+      key: key.confirm
+    },
+  ]
+  const forms =  [
     {
       type: Form,
       key: 'form',
@@ -52,84 +120,7 @@ export default () => { //基础form组件
           ref: formRef
         }
       },
-      children: [//form item结构
-        {
-          type: Form.Item,
-          key: key.username,
-          attrs: () => {
-            return {
-              label: key.username,
-              name: key.username,
-              rules: [{ required: true, message: 'Please input your username!' }]
-            }
-          },
-          children: [formItem(key.username)]
-        },
-        {
-          type: Form.Item,
-          key: key.password,
-          attrs:() => {
-            return {
-              label: key.password,
-              name: key.password,
-              rules: [{ required: true, message: 'Please input your password!' }]
-            }
-          },
-          children:[formItem(key.password)]
-        },
-        {
-          type: Form.Item,
-          key: key.show,
-          attrs: () => {
-            return {
-              label: key.show,
-              name: key.show,
-              rules: [{ required: true, message: 'Please input your show!' }],
-              style: showStatus.value
-            }
-          },
-          children: [formItem(key.show)]
-        },
-        {
-          type: Form.Item,
-          key: key.switch,
-          attrs:() => {
-            return {
-              label: key.switch,
-              name: key.switch,
-              rules: [{ required: true}]
-            }
-          },
-          children:[formItem(key.switch)]
-        },
-        {
-          type: Form.Item,
-          attrs:() => {
-            return {
-              label: key.add,
-              name: key.add
-            }
-          },
-          children:[formItem(key.add)]
-        },
-        {
-          type: Form.Item,
-          key: key.select,
-          attrs:() => {
-            return {
-              label: key.select,
-              name: key.select,
-              rules: [{ required: true}]
-            }
-          },
-          children:[formItem(key.select)]
-        },
-        {
-          type: Form.Item,
-          key: key.confirm,
-          children:[formItem(key.confirm)]
-        }
-      ]
+      children: ()=>setFormItem(formItems.value)//设置响应性
     }
   ]
   return  { 
@@ -138,10 +129,14 @@ export default () => { //基础form组件
     formRef
   }
 }
+const setFormItem = (formItems:formItemType[]) => formItems.map((item:formItemType) => Object.assign({}, item, {
+    type: Form.Item,
+    children:[formItem(item.key)]
+  }))
 
 function formItem(key: key | string):componentInstance { 
   return {
-    type: ComponentMap[key],
+    type: ComponentMap[key] || Input,
     key: key,
     attrs: setAttrs(key),
     slots: setSlots(key),
@@ -198,29 +193,22 @@ function setAttrs(key: key| string) {
         }
       }
     case 'add':
-      return () => { //动态增加表单(实验阶段)
+      return () => { //动态增加表单
         return {
           type: 'primary',
           onClick: () => { 
-            forms.value = forms.value.map(item => {
-              item.children?.splice(6, 0,
-                {
-                  type: Form.Item,
-                  key: 'test',
-                  attrs: () => {
-                    return {
-                      label: 'test',
-                      name: 'test',
-                      rules: [{ required: true, message: 'Please input your show!' }],
-                      style: showStatus.value
-                    }
-                  },
-                  children: [formItem('test')]
-                },
-              )
-              return Object.assign({}, item)
+            let index = addIndex
+            formItems.value.splice(6, 0, {
+              key: 'test_'+index,
+              attrs:() => {
+                return {
+                  label: 'test_'+index,
+                  name: 'test_'+index,
+                  rules: [{ required: true }],
+                }
+              }
             })
-            console.log('add', forms.value)
+            addIndex++
           }
         }
       }
@@ -235,7 +223,18 @@ function setAttrs(key: key| string) {
         }
       }
     default:
-      return () => { }
+      if (key.indexOf('test') === -1) { 
+        return () => { }
+      }
+      return () => { 
+        return {
+          value: formValue.value[key],
+          onChange: (e: any) => {
+            formValue.value[key] = e.target.value
+            
+          }
+        }
+      }
   }
 }
 /**

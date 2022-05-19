@@ -4,6 +4,7 @@
       <HocComponent
       v-for="item in forms" 
       v-bind="item"
+      :children="item.children()"
       @finish="onFinish"
       @submit="onSubmit"
       :key="item.key">
@@ -23,7 +24,6 @@ export default defineComponent({
   },
   setup() {
     const {forms, formValue, formRef} = useForm()
-    const newForms = reactive(forms)
     const onFinish = () => {
       console.log(formValue.value)
     }
@@ -31,7 +31,7 @@ export default defineComponent({
       
     }
     return {
-      forms: newForms,
+      forms: forms,
       onFinish,
       formRef,
       onSubmit
