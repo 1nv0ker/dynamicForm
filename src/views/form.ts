@@ -1,6 +1,6 @@
 import { Input, Switch, Form, Button, Select, } from 'ant-design-vue';
 import { PlusOutlined, MinusCircleOutlined } from '@ant-design/icons-vue'
-import { ref, h, shallowRef } from 'vue';
+import { ref, h } from 'vue';
 import { componentInstance, slot } from '../components/Hoc';
 interface ComponentMapTYPE { 
   [key:string]:any
