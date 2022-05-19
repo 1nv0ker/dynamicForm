@@ -230,7 +230,8 @@ function setAttrs(key: key| string) {
           onClick: () => { 
             let index = addIndex-1
             let findIndex = formItems.value.findIndex(item => item.key === `test_${index}`)
-            if (findIndex>=0) { 
+            if (findIndex >= 0) { 
+              delete formValue.value[`test_${index}`]
               formItems.value.splice(findIndex, 1)
               addIndex--
             }
