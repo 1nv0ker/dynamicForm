@@ -26,7 +26,6 @@
 import { defineComponent, ref } from 'vue'
 import useForm, { formValue } from '@/components/lib/form'
 import HocComponent from '@/components/Hoc';
-import type { FormInstance, FormRules } from 'element-plus'
 export default defineComponent({
   components: {
     HocComponent
@@ -36,7 +35,7 @@ export default defineComponent({
     })
     const eFormValue = ref<formValue>({
     })
-    const form = {
+    const form = {//antd
       formItems: [
         {
           attrs: () => {
@@ -75,7 +74,7 @@ export default defineComponent({
       formComponent: 'a-form',
       formItemComponent: 'a-form-item'
     }
-    const eForm = {
+    const eForm = {//elment-ul
       formItems: [
         {
           attrs: () => {
