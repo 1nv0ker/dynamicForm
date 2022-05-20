@@ -1,16 +1,10 @@
 <template>
-  <div class="home" style="width:100%;height:100%;display">
-    <div>
-      <HocComponent
-      v-for="item in forms" 
-      v-bind="item"
-      :children="item.children()"
-      @finish="onFinish"
-      @submit="onSubmit"
-      :key="item.key">
-        
-      </HocComponent>
-    </div>
+  <div class="home">
+    <router-link to="/basic">基础用法</router-link>|
+    <router-link to="/valueChange">表单值影响</router-link>|
+    <router-link to="/dyAdd">动态增加</router-link>|
+    <router-link to="/dyReduce">动态减少</router-link>|
+    <router-link to="/customiz">自定义</router-link>
   </div>
 </template>
 
@@ -41,13 +35,14 @@ export default defineComponent({
 </script>
 <style lang="less" scoped>
   .home {
-    width:100%;height:100%;
+    width:100%;
+    margin-top: 200px;
     display:flex;
     // align-items: center;
     justify-content: center;
-    &>div {
-      margin-top: 200px;
-    }
+    font-size: 2rem;
+    
+    
   }
 </style>
 

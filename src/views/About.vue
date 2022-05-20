@@ -15,7 +15,7 @@
       v-for="item in eForms" 
       v-bind="item"
       :children="item.children()"
-      @finish="onFinish"
+      @validate="validate"
       :key="item.key">
         
       </HocComponent>
@@ -26,7 +26,6 @@
 import { defineComponent, ref } from 'vue'
 import useForm, { formValue } from '@/components/lib/form'
 import HocComponent from '@/components/Hoc';
-import type { FormInstance } from 'element-plus'
 export default defineComponent({
   components: {
     HocComponent
@@ -123,9 +122,12 @@ export default defineComponent({
       
     }
     const onSubmit = () => {
-      eFormRef.value && eFormRef.value.validate((prop:any) => {
-        console.log(prop)
-      })
+      // eFormRef.value && eFormRef.value.validate((prop:any) => {
+      //   console.log(prop)
+      // })
+    }
+    const validate = () => {
+      console.log(eFormValue.value)
     }
     return {
       forms,
