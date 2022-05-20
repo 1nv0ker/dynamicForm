@@ -26,6 +26,7 @@
 import { defineComponent, ref } from 'vue'
 import useForm, { formValue } from '@/components/lib/form'
 import HocComponent from '@/components/Hoc';
+import type { FormInstance } from 'element-plus'
 export default defineComponent({
   components: {
     HocComponent
@@ -35,6 +36,7 @@ export default defineComponent({
     })
     const eFormValue = ref<formValue>({
     })
+    const eFormRef = ref<any>(null)
     const form = {//antd
       formItems: [
         {
@@ -112,7 +114,8 @@ export default defineComponent({
       ],
       formValue: eFormValue,
       formComponent: 'el-form',
-      formItemComponent: 'el-form-item'
+      formItemComponent: 'el-form-item',
+      formRef: eFormRef
     }
     const { forms}  = useForm(form)
     const eform  = useForm(eForm)
@@ -120,8 +123,7 @@ export default defineComponent({
       
     }
     const onSubmit = () => {
-      let root:any = eform.formRef.value
-      root.validate((prop:any) => {
+      eFormRef.value && eFormRef.value.validate((prop:any) => {
         console.log(prop)
       })
     }

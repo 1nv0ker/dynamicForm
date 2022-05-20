@@ -12,7 +12,8 @@ interface formIntance {
   formItems?: formItemType[],
   formValue?: formValue,
   formComponent?: string | VNode,
-  formItemComponent?: string |VNode
+  formItemComponent?: string | VNode,
+  formRef?: unknown
 }
 /**
  * 表单函数组件
@@ -20,14 +21,13 @@ interface formIntance {
  * @returns 
  */
 export default function(formIntance:formIntance) { 
-  const formRef = ref(null)
   const forms =  [
     {
       type: formIntance.formComponent,
       attrs: () => { 
         return Object.assign({}, formIntance.attrs, {
           model: formIntance.formValue,
-          ref: formRef
+          ref: formIntance.formRef
         })
       },
       children: () => formIntance.formItems?.map(item => Object.assign({}, item, {
@@ -42,7 +42,6 @@ export default function(formIntance:formIntance) {
     }
   ]
   return  { 
-    forms,
-    formRef
+    forms
   }
 }
