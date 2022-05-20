@@ -16,7 +16,7 @@
 import { defineComponent, ref } from 'vue'
 import useForm, { formValue } from '@/components/lib/form'
 import HocComponent from '@/components/Hoc';
-import { Button, Input } from 'ant-design-vue';
+import '@/components/lib/components'
 export default defineComponent({
   components: {
     HocComponent
@@ -34,7 +34,7 @@ export default defineComponent({
           },
           formItem: {
             key: 'username',
-            type: Input,
+            type: 'a-input',
             attrs: () => {
               return {
                 value: formValue.value.username,
@@ -46,7 +46,7 @@ export default defineComponent({
         {
           formItem: {
             key: 'confirm',
-            type: Button,
+            type: 'a-button',
             attrs: () => {
               return {
                 type: 'primary',
