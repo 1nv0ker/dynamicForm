@@ -27,7 +27,10 @@ export default (emits?:emits) => {
           attrs: () => {
             return {
               value: formValue.value.username,
-              onChange: (e:any) => formValue.value.username = e.target.value
+              onChange: (e: any) => { 
+                formValue.value.password = ''
+                formValue.value.username = e.target.value
+              }
             }
           }
         }

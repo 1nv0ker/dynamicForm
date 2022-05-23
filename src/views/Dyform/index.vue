@@ -1,5 +1,5 @@
 <template>
-    <div class="basic">
+    <div class="dyform">
         <HocComponent
             v-for="item in forms" 
             v-bind="item"
@@ -12,14 +12,14 @@
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue'
-import useFormIntance, {formValue } from './formItem'
+import useFormIntance, { formValue } from './formItem'
 import  useForm from '@/components/df/form'
 import HocComponent from '@/components/Hoc'
 export default defineComponent({
     components: {
         HocComponent
     },
-    name: 'Basic',
+    name: 'dyform',
     setup() {
         const formIntance = useFormIntance()
         const { forms } = useForm(formIntance)
@@ -35,11 +35,10 @@ export default defineComponent({
 </script>
 
 <style lang="less" scoped>
-    .basic {
+    .dyform {
        width: 100%;
-       height: 50%;
+        margin-top: 200px;
        display: flex;
-       align-items: center;
        justify-content: center;
     }
 </style>

@@ -1,9 +1,8 @@
 <template>
   <div class="home">
     <router-link to="/basic">基础用法</router-link>|
-    <router-link to="/valueChange">表单值影响</router-link>|
-    <router-link to="/dyAdd">动态增加</router-link>|
-    <router-link to="/dyReduce">动态减少</router-link>|
+    <router-link to="/interact">联动表单</router-link>|
+    <router-link to="/dyform">动态增加</router-link>|
     <router-link to="/customiz">自定义</router-link>
   </div>
 </template>

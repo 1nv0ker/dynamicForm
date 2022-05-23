@@ -8,7 +8,8 @@ export interface formValue {
 interface emits { 
   [key:string]: Function
 }
-export default (emits?:emits) => { 
+export default (emits?: emits) => { 
+  const formRef = ref(null)
   const formValue = ref<formValue>({
   })
   const form = {//antd
@@ -58,7 +59,13 @@ export default (emits?:emits) => {
           attrs: () => {
             return {
               type: 'primary',
-              htmlType: 'submit'
+              onClick: async () => { 
+                if (formRef.value) { 
+                  let root: any = formRef.value
+                  let props:formValue = await root.validate()
+                  emits?.onConfirm && emits.onConfirm(props)
+                }
+              }
             }
           },
           slots: {
@@ -68,6 +75,7 @@ export default (emits?:emits) => {
       }
     ],
     formValue: formValue.value,
+    formRef: formRef
   }
   return form
 }

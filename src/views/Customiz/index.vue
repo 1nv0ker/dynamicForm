@@ -1,10 +1,9 @@
 <template>
-    <div class="basic">
+    <div class="customiz">
         <HocComponent
             v-for="item in forms" 
             v-bind="item"
             :children="item.children()"
-            @finish="onFinish"
             :key="item.key">
                 
         </HocComponent>
@@ -12,30 +11,30 @@
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue'
-import useFormIntance, {formValue } from './formItem'
+import useFormIntance, { formValue } from './formItem'
 import  useForm from '@/components/df/form'
 import HocComponent from '@/components/Hoc'
 export default defineComponent({
     components: {
         HocComponent
     },
-    name: 'Basic',
+    name: 'customiz',
     setup() {
-        const formIntance = useFormIntance()
+        const formIntance = useFormIntance({
+            onConfirm: (props:formValue) => {
+                console.log(props)
+            }
+        })
         const { forms } = useForm(formIntance)
-        const onFinish = () => {
-            console.log(formIntance.formValue)
-        }
         return {
-            forms,
-            onFinish
+            forms
         }
     },
 })
 </script>
 
 <style lang="less" scoped>
-    .basic {
+    .customiz {
        width: 100%;
        height: 50%;
        display: flex;

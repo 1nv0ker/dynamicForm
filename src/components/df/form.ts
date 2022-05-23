@@ -8,7 +8,7 @@ interface formItemType {
   attrs?: componentInstance['attrs'],//表单子项组件属性
   formItem?: componentInstance//表单子项控件
 }
-interface formIntance { 
+export interface formIntance { 
   attrs?: formValue,//表单组件属性
   formItems?: formItemType[],
   formValue?: formValue,//表单值

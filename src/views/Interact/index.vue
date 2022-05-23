@@ -1,5 +1,5 @@
 <template>
-    <div class="basic">
+    <div class="interact">
         <HocComponent
             v-for="item in forms" 
             v-bind="item"
@@ -19,7 +19,7 @@ export default defineComponent({
     components: {
         HocComponent
     },
-    name: 'Basic',
+    name: 'interact',
     setup() {
         const formIntance = useFormIntance()
         const { forms } = useForm(formIntance)
@@ -35,7 +35,7 @@ export default defineComponent({
 </script>
 
 <style lang="less" scoped>
-    .basic {
+    .interact {
        width: 100%;
        height: 50%;
        display: flex;
